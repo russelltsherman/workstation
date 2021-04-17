@@ -1,14 +1,25 @@
 -include $(shell curl -sSL -o .build-harness "https://raw.githubusercontent.com/opsbot/build-harness/main/templates/Makefile.build-harness"; echo .build-harness)
 
 current_dir = $(shell pwd)
+BINSCRIPT_NAMES := $(subst ./, , $(shell find ./bin -maxdepth 1 -type f \( ! -iname "bootstrap" \)))
+BINSCRIPTS := $(addprefix ~/, $(BINSCRIPT_NAMES))
 DOTFILE_NAMES := $(subst ./dotfiles/, , $(shell find ./dotfiles -maxdepth 1 -name ".*"))
 DOTFILES := $(addprefix ~/, $(DOTFILE_NAMES))
 
 ## initialize project
 bootstrap: \
+	binscripts \
 	dotfiles \
 	gitconfig
 .PHONY: bootstrap
+
+binscripts: ~/bin cleanbinscripts \
+	$(BINSCRIPTS) # iterate our list of dotfiles and ensure they are symlinked
+.PHONY: binscripts
+
+cleanbinscripts: # if there are existing symlinks for our dotfiles in ~/ remove them
+	@for file in $(BINSCRIPT_NAMES) ; do if [ -L ~/$${file} ];then rm ~/$${file}; fi; done
+.PHONY: cleanbinscripts
 
 # clean symlinks of local dotfiles diretory from user home ~/
 cleandotfiles:
@@ -29,3 +40,9 @@ gitconfig:
 
 ~/.%: # create symlink from ~/.dotfile and ./dotfiles/.dotfile
 	cd ~ && ln -sv $(current_dir)/dotfiles/$(notdir $@) $@
+
+~/bin:
+	mkdir ~/bin
+
+~/bin/%: # create symlink form ~/bin/binscript and ./bin/binscript
+	cd ~ && ln -sv $(current_dir)/bin/$(notdir $@) $@
