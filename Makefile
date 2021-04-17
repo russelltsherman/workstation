@@ -10,6 +10,7 @@ LIBFILES := $(addprefix ~/, $(LIBFILE_NAMES))
 
 ## initialize project
 bootstrap: \
+	brew \
 	binscripts \
 	dotfiles \
 	gitconfig \
