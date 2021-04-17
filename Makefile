@@ -62,6 +62,12 @@ tmux:
 	curl -fsSL https://raw.githubusercontent.com/russelltsherman/tmux/main/bin/bootstrap | bash
 .PHONY: tmux
 
+## pull upstream changes
+update: refresh-build-harness
+	git pull
+	make bootstrap
+.PHONY: update
+
 ## add tmux configuration
 vim:
 	curl -fsSL https://raw.githubusercontent.com/russelltsherman/vim/main/bin/bootstrap | bash

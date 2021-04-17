@@ -8,6 +8,10 @@ workstation provisioner
 1. `make init` to initialize the [`build-harness`](https://github.com/opsbot/build-harness/)
 1. `make bootstrap` to initialize workstation apps and settings
 
+## update
+
+1. `make update` to pull upstream changes and rerun bootstrap
+
 ## Adblocking Hosts file
 
 Use this file to prevent your computer from connecting to selected internet hosts.
