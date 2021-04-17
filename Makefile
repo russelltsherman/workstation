@@ -16,24 +16,27 @@ bootstrap: \
 	libfiles
 .PHONY: bootstrap
 
+## symlink contents of local bin diretory into user home ~/bin
 binscripts: ~/bin cleanbinscripts \
 	$(BINSCRIPTS) # iterate our list of dotfiles and ensure they are symlinked
 .PHONY: binscripts
 
-cleanbinscripts: # if there are existing symlinks for our dotfiles in ~/ remove them
+## clean symlinks of local binfiles diretory from user home ~/bin
+cleanbinscripts:
 	@for file in $(BINSCRIPT_NAMES) ; do if [ -L ~/$${file} ];then rm ~/$${file}; fi; done
 .PHONY: cleanbinscripts
 
-# clean symlinks of local dotfiles diretory from user home ~/
+## clean symlinks of local dotfiles diretory from user home ~/
 cleandotfiles:
 	@for file in $(DOTFILE_NAMES) ; do if [ -L ~/$${file} ];then rm ~/$${file}; fi; done
 .PHONY: cleandotfiles
 
-cleanlibfiles: # if there are existing symlinks for our dotfiles in ~/ remove them
+## clean symlinks of local lib diretory from user home ~/lib
+cleanlibfiles:
 	@for file in $(LIBFILE_NAMES) ; do if [ -L ~/$${file} ];then rm ~/$${file}; fi; done
 .PHONY: cleanlibfiles
 
-# symlink contents of local dotfiles diretory into user home ~/
+## symlink contents of local dotfiles diretory into user home ~/
 dotfiles: cleandotfiles $(DOTFILES)
 .PHONY: dotfiles
 
@@ -45,20 +48,20 @@ gitconfig:
 	git config --global include.path ./.gitconfig_global
 .PHONY: gitconfig
 
-libfiles: ~/lib cleanlibfiles \
-	$(LIBFILES) # iterate our list of dotfiles and ensure they are symlinked
+## symlink contents of local lib diretory into user home ~/lib
+libfiles: ~/lib cleanlibfiles $(LIBFILES)
 .PHONY: libfiles
 
 ~/.%: # create symlink from ~/.dotfile and ./dotfiles/.dotfile
 	cd ~ && ln -sv $(current_dir)/dotfiles/$(notdir $@) $@
 
-~/bin:
+~/bin: # ensure ~/bin dir exists
 	mkdir ~/bin
 
 ~/bin/%: # create symlink form ~/bin/binscript and ./bin/binscript
 	cd ~ && ln -sv $(current_dir)/bin/$(notdir $@) $@
 
-~/lib:
+~/lib: # ensure ~/lib dir exists
 	mkdir ~/lib
 
 ~/lib/%: # create symlink form ~/lib/libfile and ./lib/libfile
