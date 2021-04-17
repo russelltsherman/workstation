@@ -14,7 +14,8 @@ bootstrap: \
 	dotfiles \
 	gitconfig \
 	libfiles \
-	tmux
+	tmux \
+	vim
 .PHONY: bootstrap
 
 ## symlink contents of local bin diretory into user home ~/bin
@@ -57,6 +58,11 @@ libfiles: ~/lib cleanlibfiles $(LIBFILES)
 tmux:
 	curl -fsSL https://raw.githubusercontent.com/russelltsherman/tmux/main/bin/bootstrap | bash
 .PHONY: tmux
+
+## add tmux configuration
+vim:
+	curl -fsSL https://raw.githubusercontent.com/russelltsherman/vim/main/bin/bootstrap | bash
+.PHONY: vim
 
 ~/.%: # create symlink from ~/.dotfile and ./dotfiles/.dotfile
 	cd ~ && ln -sv $(current_dir)/dotfiles/$(notdir $@) $@
