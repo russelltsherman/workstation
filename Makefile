@@ -17,7 +17,8 @@ bootstrap: \
 	tmux \
 	vim \
 	vscode \
-	zsh
+	zsh \
+	/etc/hosts
 .PHONY: bootstrap
 
 ## symlink contents of local bin diretory into user home ~/bin
@@ -75,6 +76,11 @@ vscode:
 zsh:
 	curl -fsSL https://raw.githubusercontent.com/russelltsherman/zsh/main/bin/bootstrap | bash
 .PHONY: zsh
+
+## addblocking hosts file from someonewhocares.org
+/etc/hosts:
+	sudo wget -O /etc/hosts https://someonewhocares.org/hosts/hosts
+.PHONY: /etc/hosts
 
 ~/.%: # create symlink from ~/.dotfile and ./dotfiles/.dotfile
 	cd ~ && ln -sv $(current_dir)/dotfiles/$(notdir $@) $@
