@@ -5,12 +5,15 @@ BINSCRIPT_NAMES := $(subst ./, , $(shell find ./bin -maxdepth 1 -type f \( ! -in
 BINSCRIPTS := $(addprefix ~/, $(BINSCRIPT_NAMES))
 DOTFILE_NAMES := $(subst ./dotfiles/, , $(shell find ./dotfiles -maxdepth 1 -name ".*"))
 DOTFILES := $(addprefix ~/, $(DOTFILE_NAMES))
+LIBFILE_NAMES := $(subst ./, , $(shell find ./lib -maxdepth 1 -name "*.sh"))
+LIBFILES := $(addprefix ~/, $(LIBFILE_NAMES))
 
 ## initialize project
 bootstrap: \
 	binscripts \
 	dotfiles \
-	gitconfig
+	gitconfig \
+	libfiles
 .PHONY: bootstrap
 
 binscripts: ~/bin cleanbinscripts \
@@ -26,6 +29,10 @@ cleandotfiles:
 	@for file in $(DOTFILE_NAMES) ; do if [ -L ~/$${file} ];then rm ~/$${file}; fi; done
 .PHONY: cleandotfiles
 
+cleanlibfiles: # if there are existing symlinks for our dotfiles in ~/ remove them
+	@for file in $(LIBFILE_NAMES) ; do if [ -L ~/$${file} ];then rm ~/$${file}; fi; done
+.PHONY: cleanlibfiles
+
 # symlink contents of local dotfiles diretory into user home ~/
 dotfiles: cleandotfiles $(DOTFILES)
 .PHONY: dotfiles
@@ -38,6 +45,10 @@ gitconfig:
 	git config --global include.path ./.gitconfig_global
 .PHONY: gitconfig
 
+libfiles: ~/lib cleanlibfiles \
+	$(LIBFILES) # iterate our list of dotfiles and ensure they are symlinked
+.PHONY: libfiles
+
 ~/.%: # create symlink from ~/.dotfile and ./dotfiles/.dotfile
 	cd ~ && ln -sv $(current_dir)/dotfiles/$(notdir $@) $@
 
@@ -46,3 +57,9 @@ gitconfig:
 
 ~/bin/%: # create symlink form ~/bin/binscript and ./bin/binscript
 	cd ~ && ln -sv $(current_dir)/bin/$(notdir $@) $@
+
+~/lib:
+	mkdir ~/lib
+
+~/lib/%: # create symlink form ~/lib/libfile and ./lib/libfile
+	cd ~ && ln -sv $(current_dir)/lib/$(notdir $@) $@

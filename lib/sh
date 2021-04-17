@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"$HOME/.config"}"
+
+#
+# usage:
+#     xdg_dir "asdf"
+
+xdg_dir() {
+  local dir="$1"
+
+  # shellcheck disable=SC2005
+  echo "$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.${dir}" || printf %s "${XDG_CONFIG_HOME}/${dir}")"
+}
+
+ASDF_DIR="$(xdg_dir "asdf")"
+export ASDF_DIR
+export ASDF_DATA_DIR="${HOME}/.asdf"
+
+# shellcheck disable=SC1090
+source "${ASDF_DIR}/asdf.sh"
+
+# chk::debian returns true if this OS is Debian Linux
+# usage:
+#     chk::debian && echo::green "this is Debian Linux"
+chk::debian() {
+  uname -a | grep "Debian" &> /dev/null
+}
+
+# chk::linux returns true if this OS is Linux
+# usage:
+#     chk::linux && echo::green "this is Linux"
+chk::linux() {
+  uname -a | grep "Linux" &> /dev/null
+}
+
+# chk::osx returns true if this OS is Darwin
+# usage:
+#     chk::osx && echo::green "this is Mac OS"
+chk::osx() {
+  uname -a | grep "Darwin" &> /dev/null
+}
+
+# chk::ubuntu returns true if this OS is Ubuntu Linux
+# usage:
+#     chk::ubuntu && echo::green "this is Ubuntu Linux"
+chk::ubuntu() {
+  uname -a | grep "Ubuntu" &> /dev/null
+}
+
+# chk::empty returns true if a given value is empty
+# usage:
+#     chk::empty "xx" || echo::red "not empty"
+chk::empty() {
+  local var="$1"
+  [ -z "$var" ]
+}
+
+# install asdf plugin and latest version
+# USAGE:
+#   pkg::install::asdf pluginname pluginrepo
+pkg::install::asdf() {
+  local pkg="${1}"
+  local repo="${2}"
+  asdf plugin-add "$pkg" "$repo"
+  asdf install "$pkg" "$(asdf list-all "$pkg" | grep -v a | grep -v e | grep -v c | grep -v y | tail -1 | xargs)"
+  asdf global "$pkg" "$(asdf list "$pkg" | tail -1 | xargs)"
+}
