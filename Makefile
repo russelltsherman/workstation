@@ -16,7 +16,8 @@ bootstrap: \
 	libfiles \
 	tmux \
 	vim \
-	vscode
+	vscode \
+	zsh
 .PHONY: bootstrap
 
 ## symlink contents of local bin diretory into user home ~/bin
@@ -69,6 +70,11 @@ vim:
 vscode:
 	curl -fsSL https://raw.githubusercontent.com/russelltsherman/vscode/main/bin/bootstrap | bash
 .PHONY: vscode
+
+## add zshell configuration
+zsh:
+	curl -fsSL https://raw.githubusercontent.com/russelltsherman/zsh/main/bin/bootstrap | bash
+.PHONY: zsh
 
 ~/.%: # create symlink from ~/.dotfile and ./dotfiles/.dotfile
 	cd ~ && ln -sv $(current_dir)/dotfiles/$(notdir $@) $@
