@@ -6,7 +6,8 @@ DOTFILES := $(addprefix ~/, $(DOTFILE_NAMES))
 
 ## initialize project
 bootstrap: \
-	dotfiles
+	dotfiles \
+	gitconfig
 .PHONY: bootstrap
 
 # clean symlinks of local dotfiles diretory from user home ~/
@@ -17,6 +18,14 @@ cleandotfiles:
 # symlink contents of local dotfiles diretory into user home ~/
 dotfiles: cleandotfiles $(DOTFILES)
 .PHONY: dotfiles
+
+## include our supplemental global gitconfig into users global gitconfig
+gitconfig:
+	# link .gitignore to global git config
+	git config --global core.excludesfile ./.gitignore
+	# link .gitconfig_globbal to global git config
+	git config --global include.path ./.gitconfig_global
+.PHONY: gitconfig
 
 ~/.%: # create symlink from ~/.dotfile and ./dotfiles/.dotfile
 	cd ~ && ln -sv $(current_dir)/dotfiles/$(notdir $@) $@
