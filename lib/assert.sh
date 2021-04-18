@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091
+
 # A collection of useful assertions. Each one checks a condition and if the condition is not satisfied, exits the
 # program. This is useful for defensive programming.
 
@@ -12,7 +14,7 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/string.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/os.sh"
 
 # Check that the given binary is available on the PATH. If it's not, exit with an error.
-function assert_is_installed {
+assert_is_installed() {
   local -r name="$1"
 
   if ! os_command_is_installed "$name"; then
@@ -22,7 +24,7 @@ function assert_is_installed {
 }
 
 # Check that the value of the given arg is not empty. If it is, exit with an error.
-function assert_not_empty {
+assert_not_empty() {
   local -r arg_name="$1"
   local -r arg_value="$2"
   local -r reason="$3"
@@ -34,12 +36,12 @@ function assert_not_empty {
 }
 
 # Check that the value of the given arg is empty. If it isn't, exit with an error.
-function assert_empty {
+assert_empty() {
   local -r arg_name="$1"
   local -r arg_value="$2"
   local -r reason="$3"
 
-  if [[ ! -z "$arg_value" ]]; then
+  if [[ -n "$arg_value" ]]; then
     log_error "The value for '$arg_name' must be empty. $reason"
     exit 1
   fi
@@ -47,7 +49,7 @@ function assert_empty {
 
 # Check that the given response from AWS is not empty or null (the null often comes from trying to parse AWS responses
 # with jq). If it is, exit with an error.
-function assert_not_empty_or_null {
+assert_not_empty_or_null() {
   local -r response="$1"
   local -r description="$2"
 
@@ -58,7 +60,7 @@ function assert_not_empty_or_null {
 }
 
 # Check that the given value is one of the values from the given list. If not, exit with an error.
-function assert_value_in_list {
+assert_value_in_list() {
   local -r arg_name="$1"
   local -r arg_value="$2"
   shift 2
@@ -77,7 +79,7 @@ function assert_value_in_list {
 # Examples that assert failure:
 #   assert_exactly_one_of "--opt1" "val1" "--opt2" "val2" "--opt3" "" "--opt4" ""
 #   assert_exactly_one_of "--opt1" "" "--opt2" "" "--opt3" "" "--opt4" ""
-function assert_exactly_one_of {
+assert_exactly_one_of() {
   local -ra args=("$@")
   local -r num_args="${#args[@]}"
   if [[ "$((num_args % 2))" -ne 0 ]]; then
@@ -91,7 +93,7 @@ function assert_exactly_one_of {
   # Determine how many arg_vals are non-empty
   for (( i=0; i<$((num_args)); i+=2 )); do
     arg_names+=("${args[i]}")
-    if [[ ! -z "${args[i+1]}" ]]; then
+    if [[ -n "${args[i+1]}" ]]; then
       num_non_empty=$((num_non_empty+1))
     fi
   done
@@ -103,7 +105,7 @@ function assert_exactly_one_of {
 }
 
 # Check that this script is running as root or sudo and exit with an error if it's not
-function assert_uid_is_root_or_sudo {
+assert_uid_is_root_or_sudo() {
   if ! os_user_is_root_or_sudo; then
     log_error "This script should be run using sudo or as the root user"
     exit 1

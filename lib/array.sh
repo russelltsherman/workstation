@@ -3,14 +3,14 @@
 # Returns 0 if the given item (needle) is in the given array (haystack); returns 1 otherwise.
 #
 # USAGE:
-#   arr::contains "1" "1 2 3"
+#   arr_contains "1" "1 2 3"
 #
 # EXAMPLES:
 #
-# arr::contains "1" "1 2 3"
+# arr_contains "1" "1 2 3"
 # Returns: 0
 #
-arr::contains() {
+arr_contains() {
   local -r needle="$1"
   shift
   local -ra haystack=("$@")
@@ -28,24 +28,24 @@ arr::contains() {
 # Joins the elements of the given array into a string with the given separator between each element.
 #
 # USAGE:
-#   arr::join delimiter list of strings
+#   arr_join delimiter list of strings
 #
 # EXAMPLES:
 #
-# arr::join , a b c d
+# arr_join , a b c d
 # Returns: a,b,c,d
 #
-# arr::join , a "b c" d
+# arr_join , a "b c" d
 # Returns: a,b c,d
 #
-# arr::join / var local tmp
+# arr_join / var local tmp
 # Returns: var/local/tmp
 #
 # arr1=('a' 'b' 'c')
-# arr::join , $arr1
+# arr_join , $arr1
 # Returns: a,b,c
 #
-arr::join() {
+arr_join() {
   local IFS="$1"
   shift
   echo "$*"
@@ -64,7 +64,7 @@ arr::join() {
 # Sources:
 # - https://stackoverflow.com/a/13216833/2308858
 #
-arr::prepend() {
+arr_prepend() {
   local -r prefix="$1"
   shift 1
   local -ar ary=($@)
@@ -86,7 +86,7 @@ arr::prepend() {
 # Sources:
 # - https://stackoverflow.com/a/15988793/2308858
 #
-arr::split() {
+arr_split() {
   local -r separator="$1"
   local -r str="$2"
   local -a ary=()
@@ -99,16 +99,16 @@ arr::split() {
 # Create a union of two or more arrays
 #
 # USAGE:
-#   arr::union [arr1[ arr2[ ...]]]
+#   arr_union [arr1[ arr2[ ...]]]
 #
 # EXAMPLE:
 #   $ arr1=('a' 'b' 'c')
 #   $ arr2=('b' 'c' 'd')
 #   $ arr3=('c' 'd' 'e')
-#   $ arr::union $arr1 $arr2 $arr3
+#   $ arr_union $arr1 $arr2 $arr3
 #   Returns: a b c d e
 #
-arr::union() {
+arr_union() {
   typeset -U sections=("$@")
   echo $sections
 }

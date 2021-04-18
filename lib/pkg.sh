@@ -6,8 +6,8 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/checks.sh"
 
 # install asdf plugin and latest version
 # USAGE:
-#   pkg::install::asdf pluginname pluginrepo
-pkg::install::asdf() {
+#   pkg_install_asdf pluginname pluginrepo
+pkg_install_asdf() {
   local pkg="${1}"
   local repo="${2}"
 
@@ -18,75 +18,75 @@ pkg::install::asdf() {
 
 # install package using homebrew
 # USAGE:
-#   pkg::install::brew packagename
-pkg::install::brew() {
+#   pkg_install_brew packagename
+pkg_install_brew() {
   local pkg="${1}"
   brew install "$pkg"
 }
 
 # install package using homebrew cask
 # USAGE:
-#   pkg::install::brew::cask packagename
-pkg::install::brew::cask() {
+#   pkg_install_brew_cask packagename
+pkg_install_brew_cask() {
   local pkg="${1}"
   brew install --cask "$pkg"
 }
 
 # install package using apt install
 # USAGE:
-#   pkg::install::debian packagename [reponame]
-pkg::install::debian() {
+#   pkg_install_debian packagename [reponame]
+pkg_install_debian() {
   local pkg="${1}"
   local repo="${2}"
 
-  chk::empty "$repo" || sudo apt-add-repository --yes --update "$repo"
+  chk_empty "$repo" || sudo apt-add-repository --yes --update "$repo"
   sudo sudo apt-get -qq install -y "$pkg"
 }
 
 # install package
 # USAGE:
-#   pkg::install packagename [reponame]
-pkg::install() {
+#   pkg_install packagename [reponame]
+pkg_install() {
   local pkg="${1}"
   local repo="${2}"
 
-  if chk::osx
+  if chk_osx
   then
-    pkg::install::brew "$pkg"
+    pkg_install_brew "$pkg"
   fi
 
-  if chk::linux
+  if chk_linux
   then
-    pkg::install::debian "$pkg" "$repo"
+    pkg_install_debian "$pkg" "$repo"
   fi
 }
 
 # USAGE:
-#   pkg::remove::brew packagename
-pkg::remove::brew() {
+#   pkg_remove_brew packagename
+pkg_remove_brew() {
   local pkg="${1}"
   brew remove "$pkg"
 }
 
 # USAGE:
-#   pkg::remove::debian packagename
-pkg::remove::debian() {
+#   pkg_remove_debian packagename
+pkg_remove_debian() {
   local pkg="${1}"
   sudo apt-get remove -y "$pkg"
 }
 
 # USAGE:
-#   pkg::remove packagename
-pkg::remove() {
+#   pkg_remove packagename
+pkg_remove() {
   local pkg="${1}"
 
-  if chk::osx
+  if chk_osx
   then
-    pkg::remove::brew "$pkg"
+    pkg_remove_brew "$pkg"
   fi
 
-  if chk::linux
+  if chk_linux
   then
-    pkg::remove::debian "$pkg"
+    pkg_remove_debian "$pkg"
   fi
 }

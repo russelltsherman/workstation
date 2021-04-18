@@ -5,7 +5,7 @@
 # shellcheck source=check.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/check.sh"
 
-if chk::command "tput"
+if chk_command "tput"
 then
   # tput is installed we will use it for colors
   __clr_reset=$(tput sgr0)

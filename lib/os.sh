@@ -1,50 +1,51 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1091
 
 # shellcheck source=./modules/bash-commons/src/log.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/log.sh"
 
 # Return the available memory on the current OS in MB
-os::get_available_memory_mb() {
+os_get_available_memory_mb() {
   free -m | awk 'NR==2{print $2}'
 }
 
 # Returns true (0) if this is an Amazon Linux server at the given version or false (1) otherwise. The version number
 # can use regex. If you don't care about the version, leave it unspecified.
-os::is_amazon_linux() {
+os_is_amazon_linux() {
   local -r version="$1"
   grep -q "Amazon Linux * $version" /etc/*release
 }
 
 # Returns true (0) if this is an Ubuntu server at the given version or false (1) otherwise. The version number
 # can use regex. If you don't care about the version, leave it unspecified.
-os::is_ubuntu() {
+os_is_ubuntu() {
   local -r version="$1"
   grep -q "Ubuntu $version" /etc/*release
 }
 
 # Returns true (0) if this is a CentOS server at the given version or false (1) otherwise. The version number
 # can use regex. If you don't care about the version, leave it unspecified.
-os::is_centos() {
+os_is_centos() {
   local -r version="$1"
   grep -q "CentOS Linux release $version" /etc/*release
 }
 
 # Returns true (0) if this is a RedHat server at the given version or false (1) otherwise. The version number
 # can use regex. If you don't care about the version, leave it unspecified.
-os::is_redhat() {
+os_is_redhat() {
   local -r version="$1"
   grep -q "Red Hat Enterprise Linux Server release $version" /etc/*release
 }
 
 
 # Returns true (0) if this is an OS X server or false (1) otherwise.
-os::is_darwin() {
+os_is_darwin() {
   [[ $(uname -s) == "Darwin" ]]
 }
 
 # Validate that the given file has the given checksum of the given checksum type, where type is one of "md5" or
 # "sha256".
-os::validate_checksum() {
+os_validate_checksum() {
   local -r filepath="$1"
   local -r checksum="$2"
   local -r checksum_type="$3"
@@ -65,37 +66,37 @@ os::validate_checksum() {
 }
 
 # Returns true (0) if this the given command/app is installed and on the PATH or false (1) otherwise.
-os::command_is_installed() {
+os_command_is_installed() {
   local -r name="$1"
   command -v "$name" > /dev/null
 }
 
 # Get the username of the current OS user
-os::get_current_users_name() {
+os_get_current_users_name() {
   id -u -n
 }
 
 # Get the name of the primary group for the current OS user
-os::get_current_users_group() {
+os_get_current_users_group() {
   id -g -n
 }
 
 # Returns true (0) if the current user is root or sudo and false (1) otherwise.
-os::user_is_root_or_sudo() {
+os_user_is_root_or_sudo() {
   [[ "$EUID" == 0 ]]
 }
 
 # Returns a zero exit code if the given $username exists
-os::user_exists() {
+os_user_exists() {
   local -r username="$1"
   id "$username" >/dev/null 2>&1
 }
 
 # Create an OS user whose name is $username
-os::create_user() {
+os_create_user() {
   local -r username="$1"
 
-  if os::user_exists "$username"; then
+  if os_user_exists "$username"; then
     log_info "User $username already exists. Will not create again."
   else
     log_info "Creating user named $username"
@@ -104,7 +105,7 @@ os::create_user() {
 }
 
 # Change the owner of $dir to $username
-os::change_dir_owner() {
+os_change_dir_owner() {
   local -r dir="$1"
   local -r username="$2"
 

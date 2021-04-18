@@ -10,19 +10,19 @@ log() {
 }
 
 # Log the given message at INFO level. All logs are written to stderr with a timestamp.
-log::info() {
+log_info() {
   local -r message="$1"
   log "INFO" "$message"
 }
 
 # Log the given message at WARN level. All logs are written to stderr with a timestamp.
-log::warn() {
+log_warn() {
   local -r message="$1"
   log "WARN" "$message"
 }
 
 # Log the given message at ERROR level. All logs are written to stderr with a timestamp.
-log::error() {
+log_error() {
   local -r message="$1"
   log "ERROR" "$message"
 }

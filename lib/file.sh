@@ -9,14 +9,14 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/os.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/string.sh"
 
 # Returns true (0) if the given file exists and is a file and false (1) otherwise
-file::exists() {
+file_exists() {
   local -r file="$1"
   [[ -f "$file" ]]
 }
 
 # Returns true (0) if the given file exists contains the given text and false (1) otherwise. The given text is a
 # regular expression.
-file::contains() {
+file_contains() {
   local -r text="$1"
   local -r file="$2"
   grep -q "$text" "$file"
@@ -24,7 +24,7 @@ file::contains() {
 
 # Append the given text to the given file. The reason this method exists, as opposed to using bash's built-in append
 # operator, is that this method uses sudo, which doesn't work natively with the built-in operator.
-file::append() {
+file_append() {
   local -r text="$1"
   local -r file="$2"
 
@@ -33,7 +33,7 @@ file::append() {
 
 # Replace a line of text that matches the given regular expression in a file with the given replacement. Only works for
 # single-line replacements. Note that this method uses sudo!
-file::replace() {
+file_replace() {
   local -r original_text_regex="$1"
   local -r replacement_text="$2"
   local -r file="$3"
@@ -54,7 +54,7 @@ file::replace() {
 }
 
 # Call file_replace_text for each of the files listed in $files[@]
-file::replace_in_files() {
+file_replace_in_files() {
   local -r original_text_regex="$1"
   local -r replacement_text="$2"
   shift 2
@@ -67,7 +67,7 @@ file::replace_in_files() {
 
 # If the given file already contains the original text (which is a regex), replace it with the given replacement. If
 # it doesn't contain that text, simply append the replacement text at the end of the file.
-file::replace_or_append() {
+file_replace_or_append() {
   local -r original_text_regex="$1"
   local -r replacement_text="$2"
   local -r file="$3"
@@ -80,7 +80,7 @@ file::replace_or_append() {
 }
 
 # Replace a specific template string in a file with a value. Provided as an array of TEMPLATE-STRING=VALUE
-file::fill_template() {
+file_fill_template() {
   local -r file="$1"
   shift 1
   local -ar auto_fill=("$@")

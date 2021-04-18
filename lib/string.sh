@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Return true (0) if the first string (haystack) contains the second string (needle), and false (1) otherwise.
-string::contains() {
+string_contains() {
   local -r haystack="$1"
   local -r needle="$2"
 
@@ -10,7 +10,7 @@ string::contains() {
 
 # Returns true (0) if the first string (haystack), which is assumed to contain multiple lines, contains the second
 # string (needle), and false (1) otherwise. The needle can contain regular expressions.
-string::multiline_contains() {
+string_multiline_contains() {
   local -r haystack="$1"
   local -r needle="$2"
 
@@ -18,7 +18,7 @@ string::multiline_contains() {
 }
 
 # Convert the given string to uppercase
-string::to_uppercase() {
+string_to_uppercase() {
   local -r str="$1"
   echo "$str" | awk '{print toupper($0)}'
 }
@@ -27,11 +27,11 @@ string::to_uppercase() {
 #
 # Example:
 #
-# string::strip_prefix "foo=bar" "foo="  ===> "bar"
-# string::strip_prefix "foo=bar" "*="    ===> "bar"
+# string_strip_prefix "foo=bar" "foo="  ===> "bar"
+# string_strip_prefix "foo=bar" "*="    ===> "bar"
 #
 # http://stackoverflow.com/a/16623897/483528
-string::strip_prefix() {
+string_strip_prefix() {
   local -r str="$1"
   local -r prefix="$2"
   echo "${str#$prefix}"
@@ -41,18 +41,18 @@ string::strip_prefix() {
 #
 # Example:
 #
-# string::strip_suffix "foo=bar" "=bar"  ===> "foo"
-# string::strip_suffix "foo=bar" "=*"    ===> "foo"
+# string_strip_suffix "foo=bar" "=bar"  ===> "foo"
+# string_strip_suffix "foo=bar" "=*"    ===> "foo"
 #
 # http://stackoverflow.com/a/16623897/483528
-string::strip_suffix() {
+string_strip_suffix() {
   local -r str="$1"
   local -r suffix="$2"
   echo "${str%$suffix}"
 }
 
 # Return true if the given response is empty or "null" (the latter is from jq parsing).
-string::is_empty_or_null() {
+string_is_empty_or_null() {
   local -r response="$1"
   [[ -z "$response" || "$response" == "null" ]]
 }
