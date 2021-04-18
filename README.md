@@ -2,6 +2,15 @@
 
 workstation provisioner
 
+## Quick Start
+
+On a fresh mac you won't have git or other required dependencies installed..
+open a Terminal and run...
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/russelltsherman/dotfiles/main/bin/bootstrap | bash
+```
+
 ## Usage
 
 1. `git clone https://github.com/russelltsherman/workstation` to pull down the repository
