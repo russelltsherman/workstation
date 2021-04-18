@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# shellcheck disable=SC1090
+source "$DIR/../lib/sh"
+
+# this assumes python installed via homebrew
+
+if chk_osx
+then
+  brew install --cask arduino
+  brew install --cask armory
+  brew install --cask diffmerge
+  brew install --cask font-consolas-for-powerline
+  brew install --cask font-fira-code
+  brew install --cask font-inconsolata
+  brew install --cask font-inconsolata-for-powerline
+  brew install --cask font-hack-nerd-font
+  brew install --cask gpg-suite
+  brew install --cask iterm2
+  brew install --cask ngrok
+  brew install --cask osxfuse
+  brew install --cask qlcolorcode
+  brew install --cask qlimagesize
+  brew install --cask qlmarkdown
+  brew install --cask qlstephen
+  brew install --cask qlvideo
+  brew install --cask quicklook-json
+  brew install --cask spectacle
+  brew install --cask suspicious-package
+  brew install --cask the-unarchiver
+  # brew install --cask tower
+  brew install --cask tunnelblick
+fi

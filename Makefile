@@ -15,6 +15,7 @@ bootstrap: \
 	dotfiles \
 	gitconfig \
 	libfiles \
+	installs \
 	tmux \
 	vim \
 	vscode \
@@ -53,6 +54,11 @@ gitconfig:
 	# link .gitconfig_globbal to global git config
 	git config --global include.path ./.gitconfig_global
 .PHONY: gitconfig
+
+## iterate install scripts in installs directory
+installs:
+	LC_COLLATE=C; for file in installs/*; do echo ""; echo "executing $${file}"; echo ""; $${file}; done
+.PHONY: installs
 
 ## symlink contents of local lib diretory into user home ~/lib
 libfiles: ~/lib cleanlibfiles $(LIBFILES)

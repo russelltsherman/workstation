@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# shellcheck disable=SC1090
+source "$DIR/../lib/sh"
+
+if chk_linux
+then
+  :
+fi
+
+if chk_osx
+then
+  brew install --cask kindle
+fi
