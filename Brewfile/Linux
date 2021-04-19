@@ -9,7 +9,6 @@ brew "git-crypt"
 brew "gnu-sed" #, args: [ "--with-default-names" ]
 brew "gnu-which"
 brew "gnupg", link: false
-brew "gopass"
 brew "gpg"
 brew "grep"
 brew "htop"

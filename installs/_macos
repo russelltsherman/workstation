@@ -9,6 +9,8 @@ source "$DIR/../lib/sh"
 
 if chk_osx
 then
+  brew tap homebrew/cask-fonts
+
   brew install --cask arduino
   brew install --cask armory
   brew install --cask diffmerge

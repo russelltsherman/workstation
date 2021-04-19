@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# shellcheck disable=SC1090
+source "$DIR/../lib/sh"
+
+if chk_linux
+then
+  sudo apt update && sudo apt install -y gnupg2 git rng-tools
+
+  wget https://github.com/gopasspw/gopass/releases/download/v1.12.5/gopass_1.12.5_linux_amd64.deb
+  sudo dpkg -i gopass-1.2.0-linux-amd64.deb
+fi
+
+if chk_osx
+then
+  brew install gopass
+fi
