@@ -1,3 +1,13 @@
+{ pkgs, ... }:
+
+{
+
+  programs.keychain = {
+    enable = true;
+  };
+
+}
+
 # programs.keychain.enable
 # Whether to enable keychain.
 

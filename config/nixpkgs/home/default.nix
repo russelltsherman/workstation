@@ -63,8 +63,6 @@ in
       lazydocker
       lazygit
       minikube
-      mutt
-      newsboat
       nodejs
       oathToolkit
       pinentry_mac
@@ -73,7 +71,6 @@ in
       rsync
       screen
       tasksh
-      taskwarrior
       tldr
       tree
       watchman
@@ -98,4 +95,5 @@ in
     enable = true;
     path = "~/.config/nixpkgs/home.nix";
   };
+  programs.man.enable = true;
 }
