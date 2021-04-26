@@ -1,0 +1,8 @@
+
+{
+  imports = [
+    ./direnv
+    ./exa
+    ./zsh
+  ];
+}

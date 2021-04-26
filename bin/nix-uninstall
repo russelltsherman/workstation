@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+#!/usr/bin/env bash
+
+usage()
+{
+   # Display Help
+   echo "a wrapper for removing nix and nix packages"
+   echo
+   echo "Syntax: nix-uninstall [packagename]"
+   echo
+   echo "invoking without a package name will uninstall nix"
+   echo
+}
+
+PACKAGENAME="${1}"
+
+if [ -z "$PACKAGENAME" ]
+then # no package specified - install nix
+
+  # TODO: add confirmation trigger
+  if [ "$(uname -s)" = "Darwin" ]
+  then
+
+    echo "stopping nix daemon"
+    sudo launchctl unload /Library/LaunchDaemons/org.nixos.nix-daemon.plist
+
+    echo "removing mount entry from /etc/fstab"
+    sudo vifs # FIXME
+    # delete the line LABEL=Nix\040Store /nix apfs rw,nobrowse.
+
+    echo "look up APFS volume device id"
+    diskutil apfs list
+
+    echo "destroy APFS volume"
+    diskutil apfs deleteVolume "<volumeDevice>" # FIXME
+
+    echo "remove /nix directory from synthetic conf"
+    sudo vim /etc/synthetic.conf
+    # delete the line `nix`.
+
+    echo "removing nix daemon"
+    sudo rm /Library/LaunchDaemons/org.nixos.nix-daemon.plist
+
+    echo "removing nix daemon users"
+    USERS=$(sudo dscl . list /Users | grep nixbld)
+
+    for USER in $USERS; do
+      sudo /usr/bin/dscl . -delete "/Users/$USER"
+      sudo /usr/bin/dscl . -delete /Groups/staff GroupMembership $USER;
+    done
+
+    echo "removing nix daemon group"
+    sudo /usr/bin/dscl . -delete "/Groups/nixbld"
+
+    echo "reverting system shell configurations"
+    sudo mv /etc/profile.backup-before-nix /etc/profile
+    sudo mv /etc/bashrc.backup-before-nix /etc/bashrc
+    sudo mv /etc/zshrc.backup-before-nix /etc/zshrc
+
+    echo "removing nix files"
+    sudo rm -rf /nix
+    sudo rm -rf /etc/nix
+    sudo rm -rf /etc/profile/nix.sh
+    sudo rm -rf /var/root/.nix-profile
+    sudo rm -rf /var/root/.nix-defexpr
+    sudo rm -rf /var/root/.nix-channels
+    sudo rm -rf /var/root/.cache/nix
+    rm -rf ~/.nix-profile
+    rm -rf ~/.nix-defexpr
+    rm -rf ~/.nix-channels
+    rm -rf ~/.nixpkgs
+    rm -rf ~/.config/nixpkgs
+    rm -rf ~/.cache/nix
+
+    echo "restart system to finalize changes"
+
+  else
+    : # LINUX NOT YET IMPLEMENTED
+  fi
+
+else
+  nix-env -e "$PACKAGENAME"
+fi
+
+

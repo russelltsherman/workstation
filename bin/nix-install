@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+usage()
+{
+   # Display Help
+   echo "a wrapper for installing nix and nix packages"
+   echo
+   echo "Syntax: nix-install [packagename]"
+   echo
+   echo "invoking without a package name will install nix"
+   echo
+}
+
+PACKAGENAME="${1}"
+
+if [ -z "$PACKAGENAME" ]
+then # no package specified - install nix
+
+  # TODO: add confirmation trigger
+  if [ "$(uname -s)" = "Darwin" ]
+  then
+    # installing for macos
+    sh <(curl -L https://nixos.org/nix/install) \
+      --darwin-use-unencrypted-nix-store-volume
+
+    # install nix-darwin
+    sudo ln -s private/var/run /run
+
+    ## Configure the channel
+    nix-channel --add https://github.com/LnL7/nix-darwin/archive/master.tar.gz darwin
+    nix-channel --update
+    export NIX_PATH=darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$HOME/.nix-defexpr/channels:$NIX_PATH
+
+    ## Or use a local git repository
+    git clone git@github.com:LnL7/nix-darwin.git ~/.nix-defexpr/darwin
+    export NIX_PATH=darwin=$HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH
+
+    cp ~/.nix-defexpr/darwin/modules/examples/simple.nix ~/.nixpkgs/darwin-configuration.nix
+
+    ## you can also use this to rebootstrap nix-darwin in case
+    ## darwin-rebuild is to old to activate the system.
+    $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild build
+    $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild switch
+
+    . /etc/static/zshrc
+
+    # install home-manager
+    nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+    nix-channel --update
+    nix-shell '<home-manager>' -A install
+    # install initially failed -
+    # the /nix/store directory was not writable by my user
+    # the ~/.config/nixpkgs directory was symlinked to workstation repo
+    # home-manager expects to create ~/.config/nixpkgs/home.nix
+
+    # fix warnings about '/nix/var/nix/profiles/per-user/root/channels' not existing
+    sudo -i nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
+    sudo -i nix-channel --update nixpkgs
+
+  else
+    : # LINUX NOT YET IMPLEMENTED
+  fi
+
+else
+  nix-env --install --attr nixpkgs."$PACKAGENAME"
+fi
+

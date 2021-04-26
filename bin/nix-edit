@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+usage()
+{
+   # Display Help
+   echo "a wrapper for editing nix ocnfig files"
+   echo
+   echo "Syntax: nix-edit [darwin|home]"
+   echo
+   echo "options:"
+   echo "darwin  modify nix-darwin configuration"
+   echo "home    modify user home configuration"
+   echo
+}
+
+ACTION="${1:-"home"}"
+EDITOR="${EDITOR:-"vi"}"
+
+case $ACTION in
+  "darwin")
+    "$EDITOR" ~/.nixpkgs/darwin-configuration.nix
+    # execute `darwin-rebuild switch` to activate changes
+    ;;
+
+  "home")
+    "$EDITOR" ~/.config/nixpkgs/home.nix ??
+    # execute `home-manager switch` to activate changes
+    ;;
+
+  "shell")
+    "$EDITOR" "$(pwd)"/shell.nix ??
+    # execute `nix-shell` to activate changes
+    ;;
+
+  *)
+    echo "unsupported action"
+    echo
+    usage
+    ;;
+esac

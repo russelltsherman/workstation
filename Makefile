@@ -3,6 +3,8 @@
 current_dir = $(shell pwd)
 BINSCRIPT_NAMES := $(subst ./, , $(shell find ./bin -maxdepth 1 -type f \( ! -iname "bootstrap" \)))
 BINSCRIPTS := $(addprefix ~/, $(BINSCRIPT_NAMES))
+CONFIG_NAMES := $(subst ./config, , $(shell find ./config -maxdepth 1 -name "*"))
+CONFIGFILES := $(addprefix ~/.config, $(CONFIG_NAMES))
 DOTFILE_NAMES := $(subst ./dotfiles/, , $(shell find ./dotfiles -maxdepth 1 -name ".*"))
 DOTFILES := $(addprefix ~/, $(DOTFILE_NAMES))
 LIBFILE_NAMES := $(subst ./, , $(shell find ./lib -maxdepth 1 -name "*.sh"))
@@ -12,6 +14,7 @@ LIBFILES := $(addprefix ~/, $(LIBFILE_NAMES))
 bootstrap: \
 	brew \
 	binscripts \
+	configfiles \
 	dotfiles \
 	gitconfig \
 	libfiles \
@@ -28,19 +31,27 @@ binscripts: ~/bin cleanbinscripts \
 	$(BINSCRIPTS) # iterate our list of dotfiles and ensure they are symlinked
 .PHONY: binscripts
 
+configfiles: ~/.config cleanconfigfiles \
+	$(CONFIGFILES) # iterate our list of configfiles and ensure they are symlinked
+.PHONY: configfiles
+
 ## clean symlinks of local binfiles diretory from user home ~/bin
 cleanbinscripts:
-	@for file in $(BINSCRIPT_NAMES) ; do if [ -L ~/$${file} ];then rm ~/$${file}; fi; done
+	@for file in $(BINSCRIPT_NAMES) ; do if [ -L $${file} ];then rm $${file}; fi; done
 .PHONY: cleanbinscripts
+
+cleanconfigfiles:
+	@for file in $(CONFIGFILES) ; do if [ -L $${file} ];then rm $${file}; fi; done
+.PHONY: cleanconfigfiles
 
 ## clean symlinks of local dotfiles diretory from user home ~/
 cleandotfiles:
-	@for file in $(DOTFILE_NAMES) ; do if [ -L ~/$${file} ];then rm ~/$${file}; fi; done
+	@for file in $(DOTFILE_NAMES) ; do if [ -L $${file} ];then rm $${file}; fi; done
 .PHONY: cleandotfiles
 
 ## clean symlinks of local lib diretory from user home ~/lib
 cleanlibfiles:
-	@for file in $(LIBFILE_NAMES) ; do if [ -L ~/$${file} ];then rm ~/$${file}; fi; done
+	@for file in $(LIBFILE_NAMES) ; do if [ -L $${file} ];then rm $${file}; fi; done
 .PHONY: cleanlibfiles
 
 ## symlink contents of local dotfiles diretory into user home ~/
@@ -94,6 +105,12 @@ zsh:
 /etc/hosts:
 	sudo wget -O /etc/hosts https://someonewhocares.org/hosts/hosts
 .PHONY: /etc/hosts
+
+~/.config: # ensure ~/config dir exists
+	mkdir ~/.config
+
+~/.config/%: # create symlink form ~/config/configfile and ./config/configfile
+	cd ~ && ln -sv $(current_dir)/config/$(notdir $@) $@
 
 ~/.%: # create symlink from ~/.dotfile and ./dotfiles/.dotfile
 	cd ~ && ln -sv $(current_dir)/dotfiles/$(notdir $@) $@
