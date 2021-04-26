@@ -54,9 +54,7 @@ in
       gnused
       gnupg
       helmfile
-      htop
       hugo
-      jq
       kubectl
       kubectx
       kustomize
@@ -86,6 +84,12 @@ in
     ] ++ goPkgs ++ pyPkgs ;
     stateVersion = "20.09";
     username = builtins.getEnv "USER";
+  };
+
+  manual = {
+    html.enable = true;
+    json.enable = true;
+    manpages.enable = true;
   };
 
   nixpkgs.config.allowUnfree = true;

@@ -160,23 +160,11 @@ in
 
 # programs.zsh.enableCompletion # Enable zsh completion. Don't forget to add
 #   environment.pathsToLink = [ "/share/zsh" ];
+
 # programs.zsh.cdpath # List of paths to autocomplete calls to `cd`.
 # programs.zsh.localVariables # Extra local variables defined at the top of .zshrc.
 # programs.zsh.sessionVariables # Environment variables that will be set for zsh session.
 
-# Type: attribute set of strings
-
-# Default: { }
-
-# Example:
-
-# {
-#   ll = "ls -l";
-#   ".." = "cd ..";
-# }
-# Declared by:
-
-# <home-manager/modules/programs/zsh.nix>
 # programs.zsh.shellGlobalAliases
 # Similar to opt-programs.zsh.shellAliases, but are substituted anywhere on a line.
 
