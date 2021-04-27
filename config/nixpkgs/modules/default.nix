@@ -5,6 +5,7 @@
     ./direnv
     ./exa
     ./fzf
+    ./git
     ./go
     # ./gpg
     ./htop
