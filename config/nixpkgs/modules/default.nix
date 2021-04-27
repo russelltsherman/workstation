@@ -18,8 +18,7 @@
     ./pazi
     ./pet
     ./readline
-    # ./ssh
-    ./starship
+    ./ssh
     ./taskwarrior
     ./tmux
     ./vscode

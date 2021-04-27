@@ -4,8 +4,8 @@
 
   programs.pazi = {
     enable = true;
-    enableBashIntegration = true;
-    enableFishIntegration = true;
+    enableBashIntegration = false;
+    enableFishIntegration = false;
     enableZshIntegration = true;
   };
 

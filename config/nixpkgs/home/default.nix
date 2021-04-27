@@ -39,6 +39,7 @@ in
     packages = with pkgs; [
       _1password
       ack
+      antibody
       awscli2
       awslogs
       bat
@@ -67,7 +68,6 @@ in
       oathToolkit
       pinentry_mac
       pv
-      readline
       rsync
       screen
       tasksh

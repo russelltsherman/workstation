@@ -4,8 +4,8 @@
 
   programs.dircolors = {
     enable = true;
-    enableBashIntegration = true;
-    enableFishIntegration = true;
+    enableBashIntegration = false;
+    enableFishIntegration = false;
     enableZshIntegration = true;
     extraConfig = ''
     '';

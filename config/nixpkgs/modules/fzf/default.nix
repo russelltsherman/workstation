@@ -4,8 +4,8 @@
 
   programs.fzf = {
     enable = true;
-    enableBashIntegration = true;
-    enableFishIntegration = true;
+    enableBashIntegration = false;
+    enableFishIntegration = false;
     enableZshIntegration = true;
     package = pkgs.fzf;
     changeDirWidgetCommand = null;
