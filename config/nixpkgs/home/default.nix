@@ -23,6 +23,7 @@ let
 
   pyPkgs = with pkgs; [
     python37
+    python37Packages.pip
     python37Packages.python-language-server
     python37Packages.virtualenv
   ];
@@ -70,6 +71,7 @@ in
       pv
       rsync
       screen
+      sshpass
       tasksh
       tldr
       tree
