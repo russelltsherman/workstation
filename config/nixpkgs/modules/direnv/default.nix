@@ -4,7 +4,7 @@
   programs.direnv = {
     enable = true;
     enableBashIntegration = false;
-    enableFishIntegration = false;
+    enableFishIntegration = true;
     enableNixDirenvIntegration = true;
     enableZshIntegration = true;
     config = {}; # Configuration written to ~/.config/direnv/config.toml.

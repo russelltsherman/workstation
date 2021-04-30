@@ -35,6 +35,8 @@ in
 
   # environment.pathsToLink = [ "/share/zsh" ];
 
+  # documentation.enable = true;
+
   home = {
     homeDirectory = builtins.getEnv "HOME";
     packages = with pkgs; [
@@ -90,6 +92,8 @@ in
     json.enable = true;
     manpages.enable = true;
   };
+
+  news.display = "show";
 
   nixpkgs.config.allowUnfree = true;
 

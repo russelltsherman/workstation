@@ -5,7 +5,7 @@
   programs.keychain = {
     enable = true;
     enableBashIntegration = false;
-    enableFishIntegration = false;
+    enableFishIntegration = true;
     enableXsessionIntegration = true;
     enableZshIntegration = true;
     agents = [];

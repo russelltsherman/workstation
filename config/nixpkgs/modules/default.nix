@@ -1,9 +1,11 @@
 
 {
   imports = [
+    ./alacritty
     ./dircolors
     ./direnv
     ./exa
+    ./fish
     ./fzf
     ./git
     ./go

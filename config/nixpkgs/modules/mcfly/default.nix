@@ -5,7 +5,7 @@
   programs.mcfly = {
     enable = true;
     enableBashIntegration = false;
-    enableFishIntegration = false;
+    enableFishIntegration = true;
     enableFuzzySearch = true;
     enableLightTheme = false;
     enableZshIntegration = true;
