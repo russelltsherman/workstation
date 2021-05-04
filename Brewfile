@@ -10,11 +10,6 @@ cask "diffmerge"
 cask "docker"
 cask "dropbox"
 cask "firefox"
-cask "font-consolas-for-powerline"
-cask "font-fira-code"
-cask "font-hack-nerd-font"
-cask "font-inconsolata"
-cask "font-inconsolata-for-powerline"
 cask "fork"
 cask "gimp"
 cask "google-chrome"
@@ -46,6 +41,3 @@ cask "virtualbox-extension-pack"
 cask "visual-studio-code"
 cask "vlc"
 cask "xquartz"
-
-
-
