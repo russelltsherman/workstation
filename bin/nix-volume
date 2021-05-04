@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+if [ "$(id -u)" -ne 0 ]
+  then echo "This script should be executed as root"
+  exit
+fi
+
+if diskutil list | grep 'Nix Config' > /dev/null 2>&1
+then
+    echo "Your Nix Config volume is already present"
+else
+    # 1. Create a Volume on your Disk for NIX Configuration
+    diskutil apfs addVolume disk1 'APFS' 'Nix Config'
+
+    # # (optional) encrypt disk
+    # read -rp "Enter passphrase to use to encrypt your Nix Config volume: " PASSPHRASE
+    # IDENTIFIER="$(diskutil list | grep 'Nix Config' | awk '{print $(NF)}')"
+    # sudo diskutil apfs encryptvolume "$IDENTIFIER" -user disk -passphrase "$PASSPHRASE"
+
+    # 2. setup Mount Point
+    echo 'config' >> /etc/synthetic.conf
+
+    # 3. write fstab entry
+    echo 'LABEL=Nix\040Config /config apfs rw,nobrowse' >> /etc/fstab
+
+    # restart to realize changes
+    reboot
+fi
